@@ -2,7 +2,7 @@
 $conn = new mysqli(
     "ballast.proxy.rlwy.net",
     "root",
-    "YOUR_PASSWORD",
+    "kDaKtDGPpXKsGSaeroDhjLJpSsMUjeDK@ballast",
     "railway",
     11892
 );
