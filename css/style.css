@@ -1,0 +1,21 @@
+
+body{font-family:Arial;background:#f7f7f7;margin:0}
+header{background:#164a41;color:white;padding:20px;text-align:center}
+nav{background:#14734a;padding:10px;text-align:center}
+nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.hero-slider{position:relative;height:500px;overflow:hidden}
+.hero-slider .slide{position:absolute;width:100%;height:100%;background-size:cover;background-position:center;animation:slide 15s infinite}
+@keyframes slide{0%{opacity:1;}33%{opacity:0;}66%{opacity:0;}100%{opacity:1;}}
+.hero-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:white;text-align:center}
+.btn{padding:10px 20px;border:none;border-radius:5px;background:#1b5e20;color:white;cursor:pointer;margin:5px}
+.btn:hover{background:#14532d;transform:scale(1.05);transition:0.3s}
+.section-title{text-align:center;margin:50px 0 20px;font-size:30px;font-weight:700;color:#1b5e20}
+.card-box{box-shadow:0 4px 12px rgba(0,0,0,.1);border-radius:10px;padding:20px;margin:15px;text-align:center;transition:0.3s}
+.card-box:hover{box-shadow:0 10px 30px rgba(0,0,0,0.3);transform:scale(1.02)}
+.counters{display:flex;justify-content:space-around;margin:40px 0}
+.counter-card{background:white;padding:30px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);text-align:center;transition:0.3s}
+.counter-card:hover{transform:scale(1.05);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.gallery-slider{display:flex;overflow-x:auto;scroll-behavior:smooth;margin:20px 0}
+.gallery-slider .slide{min-width:300px;margin-right:15px;border-radius:12px;overflow:hidden}
+footer{background:#14734a;color:white;text-align:center;padding:15px;margin-top:40px}
+.language-btn button{margin:5px}
