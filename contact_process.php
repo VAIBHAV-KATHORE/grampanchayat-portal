@@ -2,7 +2,7 @@
 $conn = new mysqli(
     "ballast.proxy.rlwy.net",
     "root",
-    "kDaKtDGPpXKsGSaeroDhjLJpSsMUjeDK@ballast",
+    "kDaKtDGPpXKsGSaeroDhjLJpSsMUjeDK",
     "railway",
     11892
 );
