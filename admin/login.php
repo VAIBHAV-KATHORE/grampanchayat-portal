@@ -1,45 +1,38 @@
 <?php
-
 session_start();
-
 include("../db.php");
 
 $msg = "";
 
 if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string(
-        $conn,
-        $_POST['email']
-    );
 
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
 
-    $q = mysqli_query(
-        $conn,
+    $q = mysqli_query($conn,
         "SELECT * FROM admin WHERE email='$email'"
     );
 
     if (mysqli_num_rows($q) > 0) {
+
         $row = mysqli_fetch_assoc($q);
 
+        // secure check
         if (password_verify($password, $row['password'])) {
-            $_SESSION['admin'] = true;
 
-            header("location:dashboard.php");
+            $_SESSION['admin'] = $row['email'];
+
+            header("Location: dashboard.php");
+            exit();
+
         } else {
-            $msg = "
-            <div class='alert alert-danger'>
-                Invalid Password
-            </div>";
+            $msg = "<div class='alert alert-danger'>Invalid Password</div>";
         }
+
     } else {
-        $msg = "
-        <div class='alert alert-danger'>
-            Email Not Found
-        </div>";
+        $msg = "<div class='alert alert-danger'>Email Not Found</div>";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
