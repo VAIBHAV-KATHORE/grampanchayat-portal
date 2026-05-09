@@ -15,30 +15,30 @@ if (isset($_POST['send'])) {
 
     $email = trim($_POST['email']);
 
-    // check email exists (prepared)
+    // check user exists
     $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+    if ($result->num_rows == 1) {
 
-        // 🔥 DELETE OLD TOKENS FIRST (IMPORTANT FIX)
+        // delete old tokens
         $stmt = $conn->prepare("DELETE FROM password_resets WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
 
-        // generate new token
+        // create token
         $token = bin2hex(random_bytes(32));
 
-        // store token safely
+        // store token
         $stmt = $conn->prepare("INSERT INTO password_resets (email, token) VALUES (?, ?)");
         $stmt->bind_param("ss", $email, $token);
         $stmt->execute();
 
         // reset link
-        $base_url = "https://grampanchayat-portal-gg79.onrender.com";
-        $reset_link = $base_url . "/admin/reset_password.php?token=" . $token;
+        $base_url = "http://localhost/yourproject/admin";
+        $reset_link = $base_url . "/reset_password.php?token=" . $token;
 
         $mail = new PHPMailer(true);
 
@@ -47,35 +47,35 @@ if (isset($_POST['send'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
 
-            $mail->Username = 'kathorevaibhav5791@gmail.com';
-            $mail->Password = 'kgpu pxzy apia cakv';
+            $mail->Username = 'YOUR_EMAIL@gmail.com';
+            $mail->Password = 'YOUR_APP_PASSWORD';
 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom('kathorevaibhav5791@gmail.com', 'Admin Panel');
+            $mail->setFrom('YOUR_EMAIL@gmail.com', 'Admin System');
             $mail->addAddress($email);
 
             $mail->isHTML(true);
-            $mail->Subject = "Password Reset Link";
+            $mail->Subject = "Reset Password Link";
 
             $mail->Body = "
-                <h3>Password Reset Request</h3>
+                <h3>Reset Your Password</h3>
                 <p>Click below link to reset password:</p>
                 <a href='$reset_link'>Reset Password</a>
-                <p>This link is valid for one-time use only.</p>
+                <p>This link is valid for one-time use.</p>
             ";
 
             $mail->send();
 
-            $msg = "<div class='alert alert-success'>Reset link sent successfully</div>";
+            $msg = "<div style='color:green;'>Reset link sent to email</div>";
 
         } catch (Exception $e) {
-            $msg = "<div class='alert alert-danger'>Mail Error: {$mail->ErrorInfo}</div>";
+            $msg = "<div style='color:red;'>Mail Error: {$mail->ErrorInfo}</div>";
         }
 
     } else {
-        $msg = "<div class='alert alert-danger'>Email not found</div>";
+        $msg = "<div style='color:red;'>Email not found</div>";
     }
 }
 ?>
@@ -92,8 +92,11 @@ if (isset($_POST['send'])) {
 <?php echo $msg; ?>
 
 <form method="POST">
+
     <input type="email" name="email" placeholder="Enter Email" required>
+
     <button type="submit" name="send">Send Reset Link</button>
+
 </form>
 
 </body>
