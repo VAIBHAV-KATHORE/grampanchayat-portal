@@ -1,6 +1,11 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "panchayat_db");
-
+$conn = new mysqli(
+    "ballast.proxy.rlwy.net",
+    "root",
+    "YOUR_PASSWORD",
+    "railway",
+    11892
+);
 $name = $_POST['name'];
 $email = $_POST['email'];
 $phone = $_POST['phone'];
