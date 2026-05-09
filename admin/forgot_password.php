@@ -36,7 +36,7 @@ if (isset($_POST['send'])) {
         // SENDGRID EMAIL SENDING
         // =========================
 
-        $apiKey = "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";
+        $apiKey = "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";
 
         $emailData = [
             "personalizations" => [[
