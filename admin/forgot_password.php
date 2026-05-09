@@ -39,13 +39,13 @@ if (isset($_POST['send'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
 
-            $mail->Username = 'YOUR_GMAIL@gmail.com';
-            $mail->Password = 'YOUR_APP_PASSWORD';
+            $mail->Username = 'kathorevaibhav5791@gmail.com';
+            $mail->Password = 'kgpu pxzy apia cakv';
 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom('YOUR_GMAIL@gmail.com', 'Panchayat Admin');
+            $mail->setFrom('kathorevaibhav5791@gmail.com', 'Panchayat_Admin_Password');
             $mail->addAddress($email);
 
             $mail->isHTML(true);
