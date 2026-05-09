@@ -156,20 +156,20 @@ if (isset($_POST['login'])) {
         <div class="mb-3">
             <label>Email</label>
 <input type="email" name="email" placeholder="Email" required>
-    <br><br>       
+        
         </div>
 
         <div class="mb-3">
             <label>Password</label>
 <input type="password" name="password" placeholder="Password" required>
-    <br><br>        </div>
+    </div>
 
         <button type="submit" name="login" class="btn btn-primary w-100">
             Login
         </button>
 
         <div class="forgot">
-            <a href="forgotpassword.php">Forgot Password?</a>
+            <a href="forgot_password.php">Forgot Password?</a>
         </div>
 
     </form>
