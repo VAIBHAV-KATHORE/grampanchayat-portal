@@ -14,25 +14,16 @@ if (isset($_POST['login'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+    if ($result->num_rows == 1) {
 
         $row = $result->fetch_assoc();
 
         $dbPassword = $row['password'];
 
-        // 1️⃣ Try hashed password check
-        $valid = password_verify($password, $dbPassword);
+        // 🔥 ONLY CORRECT METHOD
+        if (password_verify($password, $dbPassword)) {
 
-        // 2️⃣ Fallback: plain match (YOUR CURRENT DB NEEDS THIS)
-        if (!$valid && $password === $dbPassword) {
-            $valid = true;
-        }
-
-        // 3️⃣ FINAL LOGIN CHECK
-        if ($valid) {
-
-            $_SESSION['admin'] = $row['username'];
-            $_SESSION['admin_email'] = $row['email'];
+            $_SESSION['admin'] = $row['email'];
 
             header("Location: dashboard.php");
             exit();
