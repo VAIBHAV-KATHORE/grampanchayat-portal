@@ -4,7 +4,7 @@ include("../db.php");
 $msg = "";
 
 if (!isset($_GET['token'])) {
-    die("Invalid Token");
+    die("Invalid Reset Link");
 }
 
 $token = $_GET['token'];
@@ -24,21 +24,22 @@ $email = $data['email'];
 
 if (isset($_POST['reset'])) {
 
-    $pass = $_POST['password'];
-    $confirm = $_POST['confirm_password'];
+    $pass = trim($_POST['password']);
+    $confirm = trim($_POST['confirm_password']);
 
     if ($pass !== $confirm) {
         $msg = "Passwords do not match";
     } else {
 
+        // hash password
         $hashed = password_hash($pass, PASSWORD_DEFAULT);
 
-        // update password
+        // update admin password
         $stmt = $conn->prepare("UPDATE admin SET password = ? WHERE email = ?");
         $stmt->bind_param("ss", $hashed, $email);
         $stmt->execute();
 
-        // delete token
+        // delete token (IMPORTANT)
         $stmt = $conn->prepare("DELETE FROM password_resets WHERE token = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
