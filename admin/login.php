@@ -18,22 +18,18 @@ if (isset($_POST['login'])) {
 
         $row = $result->fetch_assoc();
 
-        $dbPassword = $row['password'];
-
-        // 🔥 ONLY CORRECT METHOD
-        if (password_verify($password, $dbPassword)) {
+        if (password_verify($password, $row['password'])) {
 
             $_SESSION['admin'] = $row['email'];
-
             header("Location: dashboard.php");
             exit();
 
         } else {
-            $msg = "<div class='alert alert-danger'>Invalid Password</div>";
+            echo "Invalid Password";
         }
 
     } else {
-        $msg = "<div class='alert alert-danger'>Email Not Found</div>";
+        echo "Email Not Found";
     }
 }
 ?>
