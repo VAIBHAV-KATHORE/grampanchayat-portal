@@ -4,10 +4,11 @@ include("../db.php");
 
 $msg = "";
 
+// 👉 LOGIN LOGIC GOES HERE
 if (isset($_POST['login'])) {
 
     $email = trim($_POST['email']);
-    $password = $_POST['password'];
+    $password = trim($_POST['password']);
 
     $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -20,16 +21,16 @@ if (isset($_POST['login'])) {
 
         if (password_verify($password, $row['password'])) {
 
-            $_SESSION['admin'] = $row['email'];
+            $_SESSION['admin'] = $row['username'];
             header("Location: dashboard.php");
             exit();
 
         } else {
-            echo "Invalid Password";
+            $msg = "Invalid Password";
         }
 
     } else {
-        echo "Email Not Found";
+        $msg = "Email Not Found";
     }
 }
 ?>
@@ -154,13 +155,14 @@ if (isset($_POST['login'])) {
 
         <div class="mb-3">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" required>
+<input type="email" name="email" placeholder="Email" required>
+    <br><br>       
         </div>
 
         <div class="mb-3">
             <label>Password</label>
-            <input type="password" name="password" class="form-control" required>
-        </div>
+<input type="password" name="password" placeholder="Password" required>
+    <br><br>        </div>
 
         <button type="submit" name="login" class="btn btn-primary w-100">
             Login
