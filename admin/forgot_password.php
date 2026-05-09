@@ -50,8 +50,8 @@ if (isset($_POST['send'])) {
             $mail->Username = 'kathorevaibhav5791@gmail.com';
             $mail->Password = 'kgpu pxzy apia cakv';
 
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
 
             $mail->setFrom('kathorevaibhav5791@gmail.com', 'Admin System');
             $mail->addAddress($email);
