@@ -1,9 +1,10 @@
 <?php
 $conn = mysqli_connect(
-    "sql301.infinityfree.com",
-    "if0_41872429",
-    "YOUR_VPANEL_PASSWORD",
-    "if0_41872429_panchayat_db"
+    getenv("DB_HOST"),
+    getenv("DB_USER"),
+    getenv("DB_PASS"),
+    getenv("DB_NAME"),
+    getenv("DB_PORT")
 );
 
 if (!$conn) {
