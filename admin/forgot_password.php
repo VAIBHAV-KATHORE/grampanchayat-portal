@@ -1,12 +1,4 @@
 <?php
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../src/Exception.php';
-require '../src/PHPMailer.php';
-require '../src/SMTP.php';
-
 include("../db.php");
 
 $msg = "";
@@ -15,7 +7,7 @@ if (isset($_POST['send'])) {
 
     $email = trim($_POST['email']);
 
-    // check user exists
+    // check email exists
     $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -28,51 +20,59 @@ if (isset($_POST['send'])) {
         $stmt->bind_param("s", $email);
         $stmt->execute();
 
-        // create token
+        // generate token
         $token = bin2hex(random_bytes(32));
 
-        // store token
+        // save token
         $stmt = $conn->prepare("INSERT INTO password_resets (email, token) VALUES (?, ?)");
         $stmt->bind_param("ss", $email, $token);
         $stmt->execute();
 
         // reset link
-        $base_url = "http://localhost/yourproject/admin";
+        $base_url = "https://your-domain.com/admin";
         $reset_link = $base_url . "/reset_password.php?token=" . $token;
 
-        $mail = new PHPMailer(true);
+        // =========================
+        // SENDGRID EMAIL SENDING
+        // =========================
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
+        $apiKey = "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";
 
-            $mail->Username = 'kathorevaibhav5791@gmail.com';
-            $mail->Password = 'kgpu pxzy apia cakv';
+        $emailData = [
+            "personalizations" => [[
+                "to" => [[ "email" => $email ]]
+            ]],
+            "from" => [
+                "email" => "kathorevaibhav5791@gmail.com",
+                "name" => "Admin System"
+            ],
+            "subject" => "Reset Your Password",
+            "content" => [[
+                "type" => "text/html",
+                "value" => "
+                    <h2>Password Reset Request</h2>
+                    <p>Click below link to reset your password:</p>
+                    <a href='$reset_link'>Reset Password</a>
+                    <p>This link is valid for one-time use only.</p>
+                "
+            ]]
+        ];
 
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port = 465;
+        $ch = curl_init();
 
-            $mail->setFrom('kathorevaibhav5791@gmail.com', 'Admin System');
-            $mail->addAddress($email);
+        curl_setopt($ch, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($emailData));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer $apiKey",
+            "Content-Type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            $mail->isHTML(true);
-            $mail->Subject = "Reset Password Link";
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-            $mail->Body = "
-                <h3>Reset Your Password</h3>
-                <p>Click below link to reset password:</p>
-                <a href='$reset_link'>Reset Password</a>
-                <p>This link is valid for one-time use.</p>
-            ";
-
-            $mail->send();
-
-            $msg = "<div style='color:green;'>Reset link sent to email</div>";
-
-        } catch (Exception $e) {
-            $msg = "<div style='color:red;'>Mail Error: {$mail->ErrorInfo}</div>";
-        }
+        $msg = "<div style='color:green;'>Reset link sent successfully</div>";
 
     } else {
         $msg = "<div style='color:red;'>Email not found</div>";
