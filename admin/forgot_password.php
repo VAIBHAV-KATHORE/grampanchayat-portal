@@ -29,14 +29,14 @@ if (isset($_POST['send'])) {
         $stmt->execute();
 
         // reset link
-        $base_url = "https://your-domain.com/admin";
+        $base_url = "https://grampanchayat-portal-gg79.onrender.com/admin";
         $reset_link = $base_url . "/reset_password.php?token=" . $token;
 
         // =========================
         // SENDGRID EMAIL SENDING
         // =========================
 
-        $apiKey = "YOUR_NEW_SENDGRID_API_KEY";
+        $apiKey = "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";
 
         $emailData = [
             "personalizations" => [[
