@@ -18,12 +18,21 @@ if (isset($_POST['login'])) {
 
         $row = $result->fetch_assoc();
 
-        // DEBUG (remove after working)
-        // var_dump($row['password']); exit;
+        $dbPassword = $row['password'];
 
-        if (password_verify($password, $row['password'])) {
+        // 1️⃣ Try hashed password check
+        $valid = password_verify($password, $dbPassword);
 
-            $_SESSION['admin'] = $row['email'];
+        // 2️⃣ Fallback: plain match (YOUR CURRENT DB NEEDS THIS)
+        if (!$valid && $password === $dbPassword) {
+            $valid = true;
+        }
+
+        // 3️⃣ FINAL LOGIN CHECK
+        if ($valid) {
+
+            $_SESSION['admin'] = $row['username'];
+            $_SESSION['admin_email'] = $row['email'];
 
             header("Location: dashboard.php");
             exit();
@@ -39,107 +48,43 @@ if (isset($_POST['login'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>Admin Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .login-container {
-            background: #fff;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        .form-control:focus {
-            border-color: #6e8efb;
-            box-shadow: 0 0 8px rgba(110, 142, 251, 0.3);
-        }
-
-        .btn-primary {
-            background: #6e8efb;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: #5a6fd1;
-        }
-
-        .form-label {
-            font-weight: 500;
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-light">
 
-    <div class="login-container">
+<div class="container d-flex justify-content-center align-items-center" style="height:100vh;">
 
-        <h2>Login</h2>
+    <div class="card p-4 shadow" style="width:350px;">
+
+        <h4 class="text-center mb-3">Admin Login</h4>
+
+        <?php echo $msg; ?>
+
         <form method="POST">
+
             <div class="mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-                <label class="form-label">
-                    Email Address
-                </label>
+            <div class="mb-3">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-                <input type="email"
-                    class="form-control"
-                    name="email"
-                    placeholder="Enter Email"
-                    required>
+            <button type="submit" name="login" class="btn btn-primary w-100">
+                Login
+            </button>
 
-            </div>
-            <div class="mb-3 position-relative">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
-                <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword()">
-                    👁️
-                </span>
-            </div>
-            <div class="d-grid">
-                <button type="submit" name="login" class="btn btn-primary btn-lg">Login</button>
-            </div>
-            <div class="text-center mt-3">
-                <a href="forgot_password.php">Forgot Password?</a>
-            </div>
         </form>
 
-        <script>
-            function togglePassword() {
-                const passwordField = document.getElementById('password');
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                } else {
-                    passwordField.type = 'password';
-                }
-            }
-        </script>
+    </div>
 
+</div>
 
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
