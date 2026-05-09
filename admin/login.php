@@ -6,18 +6,21 @@ $msg = "";
 
 if (isset($_POST['login'])) {
 
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $q = mysqli_query($conn,
-        "SELECT * FROM admin WHERE email='$email'"
-    );
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (mysqli_num_rows($q) > 0) {
+    if ($result->num_rows > 0) {
 
-        $row = mysqli_fetch_assoc($q);
+        $row = $result->fetch_assoc();
 
-        // secure check
+        // DEBUG (remove after working)
+        // var_dump($row['password']); exit;
+
         if (password_verify($password, $row['password'])) {
 
             $_SESSION['admin'] = $row['email'];
