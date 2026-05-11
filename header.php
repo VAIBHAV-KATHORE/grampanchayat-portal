@@ -284,7 +284,7 @@
 
         <!-- President -->
         <div class="leader-card">
-            <img src="images/gov/president.jpg">
+            <img src="images/gov/draupadi.jpg">
             <h4>राष्ट्रपती</h4>
             <p>माननीय द्रौपदी मुर्मू</p>
         </div>
@@ -311,9 +311,9 @@
         </div>
         <!-- Deputy CM -->
         <div class="leader-card">
-            <img src="images/gov/deputycm2.jpg">
+            <img src="images/gov/deputycm2avif.avif">
             <h4>उपमुख्यमंत्री</h4>
-            <p>माननीय अजित पवार</p>
+            <p>माननीय सुनेत्रा अजित पवार</p>
         </div>
 
     </div>
